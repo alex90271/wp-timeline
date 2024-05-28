@@ -187,19 +187,33 @@ function wptl_get_timeline_items_formatted()
 		if (!empty($pub['img'])) {
 			$img = '<img class="timeline__img" src="' . $pub['img'] . '"><img/>';
 		}
+		else {
+			$img = null;
+		}
+
 
 		if (!empty($pub['pdf_url'])) {
 			$pdf = '<a class="btn btn-primary elementor-button" href="' . $pub['pdf_url'] . '"> ' . __('View PDF', 'wptl') . '</a>';
 		}
+		else {
+			$pdf = null;
+		}
+
 		if (!empty($pub['media'])) {
 			$media = '<iframe class="timeline__iframe" src="https://www.youtube.com/embed/' . $pub['media'] . '" title="YouTube video player" frameborder="0"
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 				referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>';
 		}
+		else {
+			$media = null;
+		}
+
 		if (!empty($pub['fact'])) {
 			$fact = '<div class="timeline__fun-fact">
 				<p class="timeline__fun-fact-heading"><strong>Fun Fact</strong></p>
 				<p><i>' . $pub['fact'] . '</i></p></div>';
+		} else {
+			$fact = null;
 		}
 
 		$links_str = '
