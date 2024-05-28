@@ -11,7 +11,44 @@ function wptl_print_option($opt)
         case "upload":
             wptl_print_meta_upload($opt);
             break;
+        case "reqinputtext":
+            wptl_print_option_req_input_text($opt);
+            break;
     }
+}
+
+function wptl_add_timeline_option_content($post, $option)
+{
+	$option = $option['args'];
+
+	wptl_set_nonce();
+
+	$option['value'] = get_post_meta($post->ID, $option['name'], true);
+	wptl_print_option($option);
+
+}
+
+function wptl_save_timeline_option_meta($post_id)
+{
+
+	global $timeline_meta_boxes;
+
+	// save
+	foreach ($timeline_meta_boxes as $opt) {
+
+		if ($opt['type'] != 'inputtext' & $opt['type'] !='reqinputtext') {
+			$new_data = wp_get_attachment_url($_POST[$opt['name']]);
+		} else if (isset($_POST[$opt['name']])) {
+			$new_data = stripslashes($_POST[$opt['name']]);
+		} else {
+			$new_data = '';
+		}
+
+		$old_data = get_post_meta($post_id, $opt['name'], true);
+		wptl_save_meta_data($post_id, $new_data, $old_data, $opt['name']);
+
+	}
+
 }
 
 // nonce Verification	
@@ -27,6 +64,21 @@ function wptl_print_option_input_text($args)
     ?>
 
     <input type="text" name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
+        value="<?php echo $args['value']; ?>" style="width:100%" />
+    <p>
+        <?php echo $args['extra']; ?>
+    </p>
+
+    <?php
+
+}
+
+function wptl_print_option_req_input_text($args)
+{
+
+    ?>
+
+    <input type="text" required name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
         value="<?php echo $args['value']; ?>" style="width:100%" />
     <p>
         <?php echo $args['extra']; ?>

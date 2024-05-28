@@ -55,13 +55,13 @@ $timeline_meta_boxes = array(
 	array(
 		'title' => __('Date', 'wptl'),
 		'name' => 'wptl_timeline-date',
-		'type' => 'inputtext',
+		'type' => 'reqinputtext',
 		'extra' => __('Date of the event', 'wptl')
 	),
 	array(
 		'title' => __('Body', 'wptl'),
 		'name' => 'wptl_timeline-body',
-		'type' => 'inputtext',
+		'type' => 'reqinputtext',
 		'extra' => __('', 'wptl')
 	),
 	array(
@@ -118,39 +118,7 @@ function wptl_show_timeline_column($columns)
 	);
 	return $columns;
 }
-function wptl_add_timeline_option_content($post, $option)
-{
-	$option = $option['args'];
 
-	wptl_set_nonce();
-
-	$option['value'] = get_post_meta($post->ID, $option['name'], true);
-	wptl_print_option($option);
-
-}
-
-function wptl_save_timeline_option_meta($post_id)
-{
-
-	global $timeline_meta_boxes;
-
-	// save
-	foreach ($timeline_meta_boxes as $opt) {
-
-		if ($opt['type'] != 'inputtext') {
-			$new_data = wp_get_attachment_url($_POST[$opt['name']]);
-		} else if (isset($_POST[$opt['name']])) {
-			$new_data = stripslashes($_POST[$opt['name']]);
-		} else {
-			$new_data = '';
-		}
-
-		$old_data = get_post_meta($post_id, $opt['name'], true);
-		wptl_save_meta_data($post_id, $new_data, $old_data, $opt['name']);
-
-	}
-
-}
 
 
 //////////////////////////////////////////////
@@ -169,7 +137,7 @@ function wptl_get_timeline_items_array()
 	$timeline_items_q = new WP_Query(
 		array(
 			'post_type' => 'timeline',
-			'order' => 'ASC',
+			'order' => 'DESC',
 			'paged' => '',
 			'posts_per_page' => -1,
 		)
@@ -211,7 +179,14 @@ function wptl_get_timeline_items_formatted()
 	foreach ($timeline_items as $pub) {
 		// Create the links string
 
-		global $fact, $media, $pdf;
+		$fact;
+		$media;
+		$pdf;
+		$img;
+
+		if (!empty($pub['img'])) {
+			$img = '<img class="timeline__img" src="' . $pub['img'] . '"><img/>';
+		}
 
 		if (!empty($pub['pdf_url'])) {
 			$pdf = '<a class="btn btn-primary elementor-button" href="' . $pub['pdf_url'] . '"> ' . __('View PDF', 'wptl') . '</a>';
@@ -219,7 +194,7 @@ function wptl_get_timeline_items_formatted()
 		if (!empty($pub['media'])) {
 			$media = '<iframe class="timeline__iframe" src="https://www.youtube.com/embed/' . $pub['media'] . '" title="YouTube video player" frameborder="0"
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-				referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true">';
+				referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>';
 		}
 		if (!empty($pub['fact'])) {
 			$fact = '<div class="timeline__fun-fact">
@@ -232,14 +207,15 @@ function wptl_get_timeline_items_formatted()
 						<div class="timeline__content">
 							<h1>' . $pub['date'] . '</h1>
 							<h2>' . $pub['title'] . '</h2>
+							' . $img . '
 							<div class="timeline__body">
 								<div class="timeline__body-text">
 									' . $pub['body'] . '
 								</div>
-								'. $media . '
+								' . $media . '
 							</div>
-							' . $pdf . '
-							' . $fact . '
+							<p>' . $pdf . '</p>
+							<p>' . $fact . '</p>
 						</div>
 					</div>
 				';
@@ -253,89 +229,19 @@ function wptl_get_timeline_items_formatted()
 
 function wptl_shortcode()
 {
-
 	return '   
-		<style>
-	  
-		.timeline {
-			padding: 5%;
-		}
-
-		.timeline__fun-fact {
-			background: #f5f5f5;
-			border-radius: 10px;
-			padding: 5px;
-			padding: 5px 10px 2.5px 10px;
-			border: 1px solid #ccc;
-			margin-top: 10px;
-		}
-
-		.timeline__fun-fact-heading::before {
-			background-image: url("' . plugin_dir_url(__FILE__) . 'images/info-square.svg");
-			display: inline-block;
-			content: "";
-			background-repeat: no-repeat;
-			background-size: 16px 16px;
-			width: 16px;
-			height: 16px;
-			transform: translateY(0.250em);
-			margin-right: 10px;
-			margin-left: 10px;
-		}
-
-		.timeline__fun-fact-heading {
-			border: 1px solid #ccc;
-			border-radius: 75px;
-			display: flex;
-			max-width: 112px;
-			text-align: center;
-			padding: 2.5px
-		}
-
-		.timeline__iframe {
-			border-radius: 5px;
-			margin-bottom: 10px;
-			border: 1px #aaa solid;
-			width: auto;
-			height: auto;
-			overflow: hidden;
-			min-height: 200px;
-			min-width: 300px;
-
-		}
-
-		.timeline__body a {
-			width: 100%;
-			height: 100%;
-		}
-
-		.timeline__body {
-			display: flex;
-			flex-direction: row;
-		}
-
-		.timeline__body-text {
-			.btn {
-				max-width: 250px;
-				max-height: 40px;
-				margin: auto;
-				position: absolute;
-				bottom: 25%;
-			}
-		}
-	</style>
-	<script>
-		timeline(document.querySelectorAll(".timeline"), {
-			forceVerticalMode: 1300,
-			mode: "vertical",
-			visibleItems: 15
-		});
-	</script>
 	<div class="timeline">
 		<div class="timeline__wrap">
 			<div class="timeline__items">' . wptl_get_timeline_items_formatted() . '</div>
 		</div>
-	</div>';
+	</div>
+	<script>
+	timeline(document.querySelectorAll(".timeline"), {
+		forceVerticalMode: 1300,
+		mode: "vertical",
+		visibleItems: 15
+	});
+	</script>';
 }
 
 ?>

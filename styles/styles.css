@@ -1,0 +1,70 @@
+.btn {
+    border-radius: 10px !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.timeline {
+    padding: 5%;
+}
+
+.timeline__fun-fact {
+    background: #f5f5f5;
+    border-radius: 10px;
+    padding: 5px;
+    padding: 5px 10px 2.5px 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+.timeline__fun-fact-heading::before {
+    background-image: url("/wp-content/plugins/timeline-js/images/info-square.svg");
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    width: 16px;
+    height: 16px;
+    transform: translateY(0.250em);
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.timeline__fun-fact-heading {
+    border: 1px solid #ccc;
+    border-radius: 75px;
+    display: flex;
+    max-width: 112px;
+    text-align: center;
+    padding: 2.5px
+}
+
+.timeline__img {
+    max-height: 250px;
+    max-height: 250px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.timeline__iframe {
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 1px #aaa solid;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    min-height: 200px;
+    min-width: 300px;
+
+}
+
+.timeline__body {
+    display: flex;
+    flex-direction: row;
+}
+
+@media only screen and (max-width: 983px) {
+    .timeline__body {
+      display: block;
+    }
+  }
