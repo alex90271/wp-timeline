@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Test
-Description: Adds a Publications tab to wordpress. Allows authors to add a list of academic publications to the blog.
-Version: 0.5.13.2024
+Plugin Name: WP Timeline
+Description: Adds a timeline tab to wordpress. Allows creating a timeline using a custom post type
+Version: 0.5.30.2024
 Author: UFS
 */
 
@@ -47,10 +47,9 @@ add_action('save_post', 'wptl_save_option_meta');
 add_action('init', 'wptl_create_timeline');
 add_action('add_meta_boxes', 'wptl_add_timeline_options');
 
-wp_enqueue_script('timelinejs', plugin_dir_url(__FILE__) . 'timeline/dist/js/timeline.min.js', array('jquery'));
-wp_enqueue_script('viewerjs', plugin_dir_url(__FILE__) . 'ViewerJS\pdf.js', array('jquery'));
-wp_enqueue_style('timeline-styles', plugin_dir_url(__FILE__) . 'timeline/dist/css/timeline.min.css');
+wp_enqueue_script('timelinejs', plugin_dir_url(__FILE__) . 'js/timeline/dist/js/timeline.min.js', array('jquery'));
+wp_enqueue_style('timeline-styles', plugin_dir_url(__FILE__) . 'js/timeline/dist/css/timeline.min.css');
 
-add_shortcode('timeline', 'timeline_shortcode');
+add_shortcode('timeline', 'wptl_shortcode');
 
 ?>
