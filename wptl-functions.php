@@ -17,6 +17,14 @@ function wptl_print_option($opt)
     }
 }
 
+function wptl_admin_helptext() {
+    if ('edit-timeline' === get_current_screen()->id) {
+        add_action('all_admin_notices', function () {
+            echo '<p>Items are orderd by publish date<br>Use the shortcode <strong>[timeline]</strong> to display</p>';
+        });
+    }
+}
+
 function wptl_add_timeline_option_content($post, $option)
 {
 	$option = $option['args'];

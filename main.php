@@ -21,11 +21,11 @@ add_filter('wp_sprintf', function ($fragment) {
 add_action('save_post', 'wptl_save_option_meta');
 add_action('init', 'wptl_create_timeline');
 add_action('add_meta_boxes', 'wptl_add_timeline_options');
+add_action('load-edit.php', 'wptl_admin_helptext');
 
 wp_enqueue_script('timelinejs', plugin_dir_url(__FILE__) . 'js/timeline/dist/js/timeline.min.js');
 wp_enqueue_style('timelinejs-styles', plugin_dir_url(__FILE__) . 'js/timeline/dist/css/timeline.min.css');
 wp_enqueue_style('timeline-post-styles', plugin_dir_url(__FILE__) . 'styles/styles.css');
-
 
 add_shortcode('timeline', 'wptl_shortcode');
 
