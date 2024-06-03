@@ -37,7 +37,7 @@ function wptl_create_timeline()
 		'capability_type' => 'post',
 		'hierarchical' => false,
 		'taxonomies' => [''],
-		'supports' => array('title'),
+		'supports' => array('title','editor'),
 		'rewrite' => true,
 		'query_var' => true,
 		'menu_icon' => 'dashicons-clock'
@@ -57,12 +57,6 @@ $timeline_meta_boxes = array(
 		'name' => 'wptl_timeline-date',
 		'type' => 'reqinputtext',
 		'extra' => __('Date of the event', 'wptl')
-	),
-	array(
-		'title' => __('Body', 'wptl'),
-		'name' => 'wptl_timeline-body',
-		'type' => 'reqinputtext',
-		'extra' => __('', 'wptl')
 	),
 	array(
 		'title' => __('Document', 'wptl'),
@@ -114,7 +108,8 @@ function wptl_show_timeline_column($columns)
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
 		'title' => 'Title',
-		'date' => 'Last Edited'
+		'date' => 'Last Edited',
+		'order' => 'Order',
 	);
 	return $columns;
 }
@@ -152,11 +147,11 @@ function wptl_get_timeline_items_array()
 		$pub['id'] = $timeline_items_q->post->ID;
 		$pub['title'] = get_the_title();
 		$pub['date'] = get_post_meta($pub['id'], 'wptl_timeline-date', true);
-		$pub['body'] = get_post_meta($pub['id'], 'wptl_timeline-body', true);
 		$pub['pdf_url'] = get_post_meta($pub['id'], 'wptl_timeline-pdf', true);
 		$pub['media'] = get_post_meta($pub['id'], 'wptl_timeline-media', true);
 		$pub['img'] = get_post_meta($pub['id'], 'wptl_timeline-img', true);
 		$pub['fact'] = get_post_meta($pub['id'], 'wptl_timeline-fact', true);
+		$pub['body'] = get_post_field('post_content', $pub['id']);
 		$timeline_items[] = $pub;
 
 	}
