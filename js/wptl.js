@@ -1,5 +1,5 @@
-
-jQuery(document).ready(function ($) {
+var $j = jQuery.noConflict();
+$j(window).ready, function () {
 
 	var _orig_send_attachment = wp.media.editor.send.attachment;
 
@@ -19,4 +19,4 @@ jQuery(document).ready(function ($) {
 		return false;
 	});
 
-});
+};
