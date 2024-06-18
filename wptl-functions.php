@@ -17,45 +17,46 @@ function wptl_print_option($opt)
     }
 }
 
-function wptl_admin_helptext() {
+function wptl_admin_helptext()
+{
     if ('edit-timeline' === get_current_screen()->id) {
         add_action('all_admin_notices', function () {
-            echo '<p>Items are orderd by publish date<br>Use the shortcode <strong>[timeline]</strong> to display</p>';
+            echo '<div><h1>Timeline Settings and Notes</h1><p>Use the shortcode <strong>[timeline]</strong> to display</p><p>Timelines are in ' . get_option('timeline_asc_desc') . ' order from publish date and time</p></div>';
         });
     }
 }
 
 function wptl_add_timeline_option_content($post, $option)
 {
-	$option = $option['args'];
+    $option = $option['args'];
 
-	wptl_set_nonce();
+    wptl_set_nonce();
 
-	$option['value'] = get_post_meta($post->ID, $option['name'], true);
-	wptl_print_option($option);
+    $option['value'] = get_post_meta($post->ID, $option['name'], true);
+    wptl_print_option($option);
 
 }
 
 function wptl_save_timeline_option_meta($post_id)
 {
 
-	global $timeline_meta_boxes;
+    global $timeline_meta_boxes;
 
-	// save
-	foreach ($timeline_meta_boxes as $opt) {
+    // save
+    foreach ($timeline_meta_boxes as $opt) {
 
-		if ($opt['type'] != 'inputtext' & $opt['type'] !='reqinputtext') {
-			$new_data = wp_get_attachment_url($_POST[$opt['name']]);
-		} else if (isset($_POST[$opt['name']])) {
-			$new_data = stripslashes($_POST[$opt['name']]);
-		} else {
-			$new_data = '';
-		}
+        if ($opt['type'] != 'inputtext' & $opt['type'] != 'reqinputtext') {
+            $new_data = wp_get_attachment_url($_POST[$opt['name']]);
+        } else if (isset($_POST[$opt['name']])) {
+            $new_data = stripslashes($_POST[$opt['name']]);
+        } else {
+            $new_data = '';
+        }
 
-		$old_data = get_post_meta($post_id, $opt['name'], true);
-		wptl_save_meta_data($post_id, $new_data, $old_data, $opt['name']);
+        $old_data = get_post_meta($post_id, $opt['name'], true);
+        wptl_save_meta_data($post_id, $new_data, $old_data, $opt['name']);
 
-	}
+    }
 
 }
 

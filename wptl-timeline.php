@@ -65,7 +65,13 @@ $timeline_meta_boxes = array(
 		'extra' => __('PDF files only', 'wptl')
 	),
 	array(
-		'title' => __('Media', 'wptl'),
+		'title' => __('Link', 'wptl'),
+		'name' => 'wptl_timeline-link',
+		'type' => 'inputtext',
+		'extra' => __('Accepts any URL. Must include https://', 'wptl')
+	),
+	array(
+		'title' => __('Video', 'wptl'),
 		'name' => 'wptl_timeline-media',
 		'type' => 'inputtext',
 		'extra' => __('Accepts youtube video ID. For example: <i><strong>dQw4w9WgXcQ</strong></i> in (www.youtube.com/watch?v=<i><strong>dQw4w9WgXcQ</strong></i>)', 'wptl')
@@ -108,8 +114,7 @@ function wptl_show_timeline_column($columns)
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
 		'title' => 'Title',
-		'date' => 'Last Edited',
-		'order' => 'Order',
+		'date' => 'Published Date'
 	);
 	return $columns;
 }
@@ -132,7 +137,7 @@ function wptl_get_timeline_items_array()
 	$timeline_items_q = new WP_Query(
 		array(
 			'post_type' => 'timeline',
-			'order' => 'DESC',
+			'order' => get_option('timeline_asc_desc'),
 			'paged' => '',
 			'posts_per_page' => -1,
 		)
@@ -151,6 +156,7 @@ function wptl_get_timeline_items_array()
 		$pub['media'] = get_post_meta($pub['id'], 'wptl_timeline-media', true);
 		$pub['img'] = get_post_meta($pub['id'], 'wptl_timeline-img', true);
 		$pub['fact'] = get_post_meta($pub['id'], 'wptl_timeline-fact', true);
+		$pub['link'] = get_post_meta($pub['id'], 'wptl_timeline-link', true);
 		$pub['body'] = get_post_field('post_content', $pub['id']);
 		$timeline_items[] = $pub;
 
@@ -178,6 +184,7 @@ function wptl_get_timeline_items_formatted()
 		$media;
 		$pdf;
 		$img;
+		$link;
 
 		if (!empty($pub['img'])) {
 			$img = '<img class="timeline__img" src="' . $pub['img'] . '"><img/>';
@@ -188,10 +195,22 @@ function wptl_get_timeline_items_formatted()
 
 
 		if (!empty($pub['pdf_url'])) {
-			$pdf = '<a class="btn btn-primary elementor-button" href="' . $pub['pdf_url'] . '"> ' . __('View PDF', 'wptl') . '</a>';
+			$pdf = '<a class="abtn abtn-primary" href="' . $pub['pdf_url'] . '"> ' . __('Read more', 'wptl') . '</a>';
 		}
 		else {
 			$pdf = null;
+		}
+
+		if (!empty($pub['link'])) {
+			if (!empty($pub['pdf_url'])) {
+				$link = '<a class="abtn abtn-secondary" href="' . $pub['link'] . '"> ' . __('Read more', 'wptl') . '</a>';
+			}
+			else {
+				$link = '<a class="abtn abtn-primary" href="' . $pub['link'] . '"> ' . __('Read more', 'wptl') . '</a>';
+			}
+		}
+		else {
+			$link = null;
 		}
 
 		if (!empty($pub['media'])) {
@@ -203,6 +222,7 @@ function wptl_get_timeline_items_formatted()
 			$media = null;
 		}
 
+
 		if (!empty($pub['fact'])) {
 			$fact = '<div class="timeline__fun-fact">
 				<p class="timeline__fun-fact-heading"><strong>Fun Fact</strong></p>
@@ -212,7 +232,7 @@ function wptl_get_timeline_items_formatted()
 		}
 
 		$links_str = '
-					<div class="timeline__item">
+					<div id="timeline_element_'.$pub['id'].'" class="timeline__item">
 						<div class="timeline__content">
 							<h1>' . $pub['date'] . '</h1>
 							<h2>' . $pub['title'] . '</h2>
@@ -223,7 +243,7 @@ function wptl_get_timeline_items_formatted()
 								</div>
 								' . $media . '
 							</div>
-							<p>' . $pdf . '</p>
+							<p class="timeline__links">' . $pdf . $link . '</p>
 							<p>' . $fact . '</p>
 						</div>
 					</div>
@@ -246,9 +266,8 @@ function wptl_shortcode()
 	</div>
 	<script>
 	timeline(document.querySelectorAll(".timeline"), {
-		forceVerticalMode: 1300,
-		mode: "vertical",
-		visibleItems: 15
+		forceVerticalMode: 986,
+		mode: "horizontal"
 	});
 	</script>';
 }
