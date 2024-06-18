@@ -56,7 +56,7 @@ $timeline_meta_boxes = array(
 		'title' => __('Date', 'wptl'),
 		'name' => 'wptl_timeline-date',
 		'type' => 'dateinput',
-		'extra' => __('Date of the event', 'wptl')
+		'extra' => __('Date of the event. Use the 1st to display just the month and year on the frontend', 'wptl')
 	),
 	array(
 		'title' => __('Document', 'wptl'),
@@ -132,7 +132,7 @@ function manage_meta_columns($cols, $post_id)
 {
 	if ($cols = 'event_date') {
 		$event_date = get_post_meta($post_id, 'wptl_timeline-date', true);
-		echo date('F d, Y', strtotime($event_date));
+		echo wptl_convert_date($event_date);
 	}
 }
 
@@ -147,6 +147,8 @@ function wptl_get_timeline_items_array()
 		array(
 			'post_type' => 'timeline',
 			'order' => get_option('timeline_asc_desc'),
+			'orderby' => 'wptl_timeline-date',
+			'meta_key' => 'wptl_timeline-date',
 			'paged' => '',
 			'posts_per_page' => -1,
 		)
@@ -238,7 +240,7 @@ function wptl_get_timeline_items_formatted()
 		$links_str = '
 					<div id="timeline_element_' . $pub['id'] . '" class="timeline__item">
 						<div class="timeline__content">
-							<h1>' . date('F d, Y', strtotime($pub['date'])) . '</h1>
+							<h1>' . wptl_convert_date($pub['date']) . '</h1>
 							<h2>' . $pub['title'] . '</h2>
 							' . $img . '
 							<div class="timeline__body">

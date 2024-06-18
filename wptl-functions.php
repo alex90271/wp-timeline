@@ -20,6 +20,16 @@ function wptl_print_option($opt)
     }
 }
 
+function wptl_convert_date($date)
+{
+    if (date('d', strtotime($date)) == "01") {
+        return date('F Y', strtotime($date));
+    }
+    else {
+        return date('F d, Y', strtotime($date));
+    }
+}
+
 function wptl_admin_helptext()
 {
     if ('edit-timeline' === get_current_screen()->id) {
