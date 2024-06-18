@@ -37,7 +37,7 @@ function wptl_create_timeline()
 		'capability_type' => 'post',
 		'hierarchical' => false,
 		'taxonomies' => [''],
-		'supports' => array('title','editor'),
+		'supports' => array('title', 'editor'),
 		'rewrite' => true,
 		'query_var' => true,
 		'menu_icon' => 'dashicons-clock'
@@ -114,11 +114,11 @@ function wptl_show_timeline_column($columns)
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
 		'title' => 'Title',
-		'date' => 'Published Date',
-		'order' => get_option('timeline_asc_desc'),
+		'event_date' => 'Event Date'
 	);
 	return $columns;
 }
+
 
 
 
@@ -127,6 +127,14 @@ function wptl_show_timeline_column($columns)
 // DISPLAY Section Functions
 //
 //////////////////////////////////////////////
+
+function manage_meta_columns($cols, $post_id)
+{
+	if ($cols = 'event_date') {
+		$event_date = get_post_meta($post_id, 'wptl_timeline-date', true);
+		echo date('F d, Y', strtotime($event_date));
+	}
+}
 
 
 /* Base function that returns a nice array of all the requested timeline. */
@@ -138,12 +146,12 @@ function wptl_get_timeline_items_array()
 	$timeline_items_q = new WP_Query(
 		array(
 			'post_type' => 'timeline',
-			'order' =>  get_option('timeline_asc_desc'),
+			'order' => get_option('timeline_asc_desc'),
 			'paged' => '',
 			'posts_per_page' => -1,
 		)
 	);
-	
+
 	while ($timeline_items_q->have_posts()) {
 
 		$pub = array();
@@ -189,28 +197,24 @@ function wptl_get_timeline_items_formatted()
 
 		if (!empty($pub['img'])) {
 			$img = '<img class="timeline__img" src="' . $pub['img'] . '"><img/>';
-		}
-		else {
+		} else {
 			$img = null;
 		}
 
 
 		if (!empty($pub['pdf_url'])) {
 			$pdf = '<a class="abtn abtn-primary" href="' . $pub['pdf_url'] . '"> ' . __('Read more', 'wptl') . '</a>';
-		}
-		else {
+		} else {
 			$pdf = null;
 		}
 
 		if (!empty($pub['link'])) {
 			if (!empty($pub['pdf_url'])) {
 				$link = '<a class="abtn abtn-secondary" href="' . $pub['link'] . '"> ' . __('Read more', 'wptl') . '</a>';
-			}
-			else {
+			} else {
 				$link = '<a class="abtn abtn-primary" href="' . $pub['link'] . '"> ' . __('Read more', 'wptl') . '</a>';
 			}
-		}
-		else {
+		} else {
 			$link = null;
 		}
 
@@ -218,8 +222,7 @@ function wptl_get_timeline_items_formatted()
 			$media = '<iframe class="timeline__iframe" src="https://www.youtube.com/embed/' . $pub['media'] . '" title="YouTube video player" frameborder="0"
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 				referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>';
-		}
-		else {
+		} else {
 			$media = null;
 		}
 
@@ -233,9 +236,9 @@ function wptl_get_timeline_items_formatted()
 		}
 
 		$links_str = '
-					<div id="timeline_element_'.$pub['id'].'" class="timeline__item">
+					<div id="timeline_element_' . $pub['id'] . '" class="timeline__item">
 						<div class="timeline__content">
-							<h1>' . $pub['date'] . '</h1>
+							<h1>' . date('F d, Y', strtotime($pub['date'])) . '</h1>
 							<h2>' . $pub['title'] . '</h2>
 							' . $img . '
 							<div class="timeline__body">

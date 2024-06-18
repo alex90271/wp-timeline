@@ -22,6 +22,7 @@ add_action('save_post', 'wptl_save_option_meta');
 add_action('init', 'wptl_create_timeline');
 add_action('add_meta_boxes', 'wptl_add_timeline_options');
 add_action('load-edit.php', 'wptl_admin_helptext');
+add_action('manage_posts_custom_column', 'manage_meta_columns', 10, 2);
 
 wp_enqueue_script('timelinejs', plugin_dir_url(__FILE__) . 'js/timeline/js/timeline.js');
 wp_enqueue_style('timelinejs-styles', plugin_dir_url(__FILE__) . 'js/timeline/css/timeline.css');
