@@ -55,7 +55,7 @@ $timeline_meta_boxes = array(
 	array(
 		'title' => __('Date', 'wptl'),
 		'name' => 'wptl_timeline-date',
-		'type' => 'reqinputtext',
+		'type' => 'dateinput',
 		'extra' => __('Date of the event', 'wptl')
 	),
 	array(
@@ -114,7 +114,8 @@ function wptl_show_timeline_column($columns)
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
 		'title' => 'Title',
-		'date' => 'Published Date'
+		'date' => 'Published Date',
+		'order' => get_option('timeline_asc_desc'),
 	);
 	return $columns;
 }
@@ -137,12 +138,12 @@ function wptl_get_timeline_items_array()
 	$timeline_items_q = new WP_Query(
 		array(
 			'post_type' => 'timeline',
-			'order' => get_option('timeline_asc_desc'),
+			'order' =>  get_option('timeline_asc_desc'),
 			'paged' => '',
 			'posts_per_page' => -1,
 		)
 	);
-
+	
 	while ($timeline_items_q->have_posts()) {
 
 		$pub = array();

@@ -14,6 +14,9 @@ function wptl_print_option($opt)
         case "reqinputtext":
             wptl_print_option_req_input_text($opt);
             break;
+        case "dateinput":
+            wptl_print_option_date_input($opt);
+            break;
     }
 }
 
@@ -21,7 +24,7 @@ function wptl_admin_helptext()
 {
     if ('edit-timeline' === get_current_screen()->id) {
         add_action('all_admin_notices', function () {
-            echo '<div><h1>Timeline Settings and Notes</h1><p>Use the shortcode <strong>[timeline]</strong> to display</p><p>Timelines are in ' . get_option('timeline_asc_desc') . ' order from publish date and time</p></div>';
+            echo '<div><h1>Timeline Settings and Notes</h1><p>Use the shortcode <strong>[timeline]</strong> to display</p><p>Timelines are in ' . get_option('timeline_asc_desc') . ' order from event date</p></div>';
         });
     }
 }
@@ -45,7 +48,7 @@ function wptl_save_timeline_option_meta($post_id)
     // save
     foreach ($timeline_meta_boxes as $opt) {
 
-        if ($opt['type'] != 'inputtext' & $opt['type'] != 'reqinputtext') {
+        if ($opt['type'] != 'inputtext' & $opt['type'] != 'reqinputtext' & $opt['type'] != 'dateinput') {
             $new_data = wp_get_attachment_url($_POST[$opt['name']]);
         } else if (isset($_POST[$opt['name']])) {
             $new_data = stripslashes($_POST[$opt['name']]);
@@ -88,6 +91,21 @@ function wptl_print_option_req_input_text($args)
     ?>
 
     <input type="text" required name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
+        value="<?php echo $args['value']; ?>" style="width:100%" />
+    <p>
+        <?php echo $args['extra']; ?>
+    </p>
+
+    <?php
+
+}
+
+function wptl_print_option_date_input($args)
+{
+
+    ?>
+
+    <input type="date" required name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
         value="<?php echo $args['value']; ?>" style="width:100%" />
     <p>
         <?php echo $args['extra']; ?>
