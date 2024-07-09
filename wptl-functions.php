@@ -90,8 +90,8 @@ function wptl_submenu_callback()
             <input type="hidden" name="action" value="update_timeline_horz_vert" />
             <select id="timeline_horz_vert" name="timeline_horz_vert" value=''>
                 <option value="<?php echo get_option('timeline_horz_vert') ?>">Select an option</option>
-                <option value="Horizontal">Horizontal</option>
-                <option value="Vertical">Vertical</option>
+                <option value="horizontal">Horizontal</option>
+                <option value="vertical">Vertical</option>
             </select>
             <?php
             submit_button()
