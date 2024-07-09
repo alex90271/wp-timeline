@@ -53,12 +53,6 @@ function wptl_create_timeline()
 // Setup the timeline edit page
 $timeline_meta_boxes = array(
 	array(
-		'title' => __('Date', 'wptl'),
-		'name' => 'wptl_timeline-date',
-		'type' => 'dateinput',
-		'extra' => __('Date of the event. Use the 1st to display just the month and year on the frontend', 'wptl')
-	),
-	array(
 		'title' => __('Document', 'wptl'),
 		'name' => 'wptl_timeline-pdf',
 		'type' => 'upload',
@@ -114,7 +108,7 @@ function wptl_show_timeline_column($columns)
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
 		'title' => 'Title',
-		'event_date' => 'Event Date'
+		'date' => 'Event Date'
 	);
 	return $columns;
 }
@@ -128,14 +122,6 @@ function wptl_show_timeline_column($columns)
 //
 //////////////////////////////////////////////
 
-function manage_meta_columns($cols, $post_id)
-{
-	if ($cols = 'event_date') {
-		$event_date = get_post_meta($post_id, 'wptl_timeline-date', true);
-		echo wptl_convert_date($event_date);
-	}
-}
-
 
 /* Base function that returns a nice array of all the requested timeline. */
 function wptl_get_timeline_items_array()
@@ -147,9 +133,7 @@ function wptl_get_timeline_items_array()
 		array(
 			'post_type' => 'timeline',
 			'order' => get_option('timeline_asc_desc'),
-			'orderby' => 'wptl_timeline-date',
-			'meta_key' => 'wptl_timeline-date',
-			'paged' => '',
+			'orderby' => 'date',
 			'posts_per_page' => -1,
 		)
 	);
@@ -162,7 +146,7 @@ function wptl_get_timeline_items_array()
 
 		$pub['id'] = $timeline_items_q->post->ID;
 		$pub['title'] = get_the_title();
-		$pub['date'] = get_post_meta($pub['id'], 'wptl_timeline-date', true);
+		$pub['date'] = get_post_datetime();
 		$pub['pdf_url'] = get_post_meta($pub['id'], 'wptl_timeline-pdf', true);
 		$pub['media'] = get_post_meta($pub['id'], 'wptl_timeline-media', true);
 		$pub['img'] = get_post_meta($pub['id'], 'wptl_timeline-img', true);
@@ -273,7 +257,7 @@ function wptl_shortcode()
 	<script>
 	timeline(document.querySelectorAll(".timeline"), {
 		forceVerticalMode: 986,
-		mode: "horizontal"
+		mode: "'. get_option('timeline_horz_vert').'",
 	});
 	</script>';
 }

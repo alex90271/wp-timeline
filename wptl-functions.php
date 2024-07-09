@@ -1,41 +1,122 @@
 <?php
 
 // how to print each meta box type
-function wptl_print_option($opt)
+function wptl_print_option($args)
 {
-
-    switch ($opt['type']) {
+    switch ($args['type']) {
         case "inputtext":
-            wptl_print_option_input_text($opt);
+            ?>
+            <input type="text" name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
+                value="<?php echo $args['value']; ?>" style="width:100%" />
+            <p>
+                <?php echo $args['extra']; ?>
+            </p>
+            <?php
+
             break;
         case "upload":
-            wptl_print_meta_upload($opt);
+
+            $src = '';
+
+            if (!empty($args['value'])) {
+                $src = $args['value'];
+            }
+
+            ?>
+            <input name="<?php echo $args['name']; ?>" type="hidden" id="upload_image_attachment_id"
+                value="<?php echo esc_html($args['value']); ?>" />
+            <input id="upload_image_text_meta" type="text" value="<?php echo $src; ?>" style="width:80%" />
+            <input class="upload_image_button_meta" type="button" value="Upload" />
+
+            <p>
+                <?php echo $args['extra']; ?>
+            </p>
+            <?php
+
             break;
         case "reqinputtext":
-            wptl_print_option_req_input_text($opt);
-            break;
-        case "dateinput":
-            wptl_print_option_date_input($opt);
+            ?>
+            <input type="text" required name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
+                value="<?php echo $args['value']; ?>" style="width:100%" />
+            <p>
+                <?php echo $args['extra']; ?>
+            </p>
+            <?php
+
             break;
     }
+}
+
+/**
+ * Adds a submenu page under a custom post type parent.
+ */
+function wptl_register_sub_page()
+{
+    add_submenu_page(
+        'edit.php?post_type=timeline',
+        'Timeline Settings',
+        'Timeline Settings',
+        'manage_options',
+        'wptl_submenu',
+        'wptl_submenu_callback'
+    );
+}
+
+/**
+ * Display callback for the submenu page.
+ */
+function wptl_submenu_callback()
+{
+    ?>
+    <div class="wrap">
+        <h2>Timeline Settings and Notes</h2>
+        <h3>Timeline Order</h3>
+        <p>Currently set to: <?php echo get_option('timeline_asc_desc') ?></p>
+        <form action="admin-post.php" name='update_timeline_asc_desc_form' method="post">
+            <input type="hidden" name="action" value="update_timeline_asc_desc" />
+            <select id="timeline_asc_desc" name="timeline_asc_desc" value=''>
+                <option value="<?php echo get_option('timeline_asc_desc') ?>">Select an option</option>
+                <option value="ASC">Ascending</option>
+                <option value="DESC">Descending</option>
+            </select>
+            <?php
+            submit_button()
+                ?>
+        </form>
+        <br/>
+        <h3>Timeline Orientation</h3>
+        <p>Currently set to: <?php echo get_option('timeline_horz_vert') ?></p>
+        <form action="admin-post.php" name='update_timeline_horz_vert_form' method="post">
+            <input type="hidden" name="action" value="update_timeline_horz_vert" />
+            <select id="timeline_horz_vert" name="timeline_horz_vert" value=''>
+                <option value="<?php echo get_option('timeline_horz_vert') ?>">Select an option</option>
+                <option value="Horizontal">Horizontal</option>
+                <option value="Vertical">Vertical</option>
+            </select>
+            <?php
+            submit_button()
+                ?>
+        </form>
+    </div>
+    <?php
+}
+
+function asc_desc_do_update() {
+    update_option('timeline_asc_desc', $_POST['timeline_asc_desc']);
+    wp_redirect('admin.php?page=wptl_submenu');
+}
+function horz_vert_do_update() {
+    update_option('timeline_horz_vert', $_POST['timeline_horz_vert']);
+    wp_redirect('admin.php?page=wptl_submenu');
 }
 
 function wptl_convert_date($date)
+#if the day =1 then only return the month
 {
-    if (date('d', strtotime($date)) == "01") {
-        return date('F Y', strtotime($date));
-    }
-    else {
-        return date('F d, Y', strtotime($date));
-    }
-}
-
-function wptl_admin_helptext()
-{
-    if ('edit-timeline' === get_current_screen()->id) {
-        add_action('all_admin_notices', function () {
-            echo '<div><h1>Timeline Settings and Notes</h1><p>Use the shortcode <strong>[timeline]</strong> to display</p><p>Timelines are in ' . get_option('timeline_asc_desc') . ' order from event date</p></div>';
-        });
+    if ($date->format('d') == "01") {
+        return $date->format('F Y');
+    } else {
+        return $date->format('F d, Y');
     }
 }
 
@@ -58,7 +139,7 @@ function wptl_save_timeline_option_meta($post_id)
     // save
     foreach ($timeline_meta_boxes as $opt) {
 
-        if ($opt['type'] != 'inputtext' & $opt['type'] != 'reqinputtext' & $opt['type'] != 'dateinput') {
+        if ($opt['type'] != 'inputtext' & $opt['type'] != 'reqinputtext') {
             $new_data = wp_get_attachment_url($_POST[$opt['name']]);
         } else if (isset($_POST[$opt['name']])) {
             $new_data = stripslashes($_POST[$opt['name']]);
@@ -79,76 +160,6 @@ function wptl_set_nonce()
     wp_nonce_field(plugin_basename(__FILE__), 'wptl_timelinenonce');
 }
 
-// text => name, title, value, default
-function wptl_print_option_input_text($args)
-{
-
-    ?>
-
-    <input type="text" name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
-        value="<?php echo $args['value']; ?>" style="width:100%" />
-    <p>
-        <?php echo $args['extra']; ?>
-    </p>
-
-    <?php
-
-}
-
-function wptl_print_option_req_input_text($args)
-{
-
-    ?>
-
-    <input type="text" required name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
-        value="<?php echo $args['value']; ?>" style="width:100%" />
-    <p>
-        <?php echo $args['extra']; ?>
-    </p>
-
-    <?php
-
-}
-
-function wptl_print_option_date_input($args)
-{
-
-    ?>
-
-    <input type="date" required name="<?php echo $args['name']; ?>" id="<?php echo $args['name']; ?>"
-        value="<?php echo $args['value']; ?>" style="width:100%" />
-    <p>
-        <?php echo $args['extra']; ?>
-    </p>
-
-    <?php
-
-}
-
-// text => name, title, value
-function wptl_print_meta_upload($args)
-{
-
-    $src = '';
-
-    if (!empty($args['value'])) {
-        $src = $args['value'];
-    }
-
-    ?>
-
-    <input name="<?php echo $args['name']; ?>" type="hidden" id="upload_image_attachment_id"
-        value="<?php echo esc_html($args['value']); ?>" />
-    <input id="upload_image_text_meta" type="text" value="<?php echo $src; ?>" style="width:80%" />
-    <input class="upload_image_button_meta" type="button" value="Upload" />
-
-    <p>
-        <?php echo $args['extra']; ?>
-    </p>
-
-    <?php
-
-}
 
 /* save option function that trigger when saveing each post
  */

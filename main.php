@@ -21,8 +21,7 @@ add_filter('wp_sprintf', function ($fragment) {
 add_action('save_post', 'wptl_save_option_meta');
 add_action('init', 'wptl_create_timeline');
 add_action('add_meta_boxes', 'wptl_add_timeline_options');
-add_action('load-edit.php', 'wptl_admin_helptext');
-add_action('manage_posts_custom_column', 'manage_meta_columns', 10, 2);
+add_action('admin_menu', 'wptl_register_sub_page');
 
 wp_enqueue_script('timelinejs', plugin_dir_url(__FILE__) . 'js/timeline/js/timeline.js');
 wp_enqueue_style('timelinejs-styles', plugin_dir_url(__FILE__) . 'js/timeline/css/timeline.css');
@@ -34,6 +33,11 @@ add_option('timeline_asc_desc', $value = 'ASC', $autoload = 'yes');
 $asc_desc_param = array(
     'asc_desc' => get_option('timeline_asc_desc')
 );
-wp_localize_script('asc_desc', 'asc_desc', $asc_desc_param);
+add_option('timeline_horz_vert', $value = 'horizontal', $autoload = 'yes');
+$asc_desc_param = array(
+    'horz_vert' => get_option('timeline_horz_vert')
+);
+add_action('admin_post_update_timeline_horz_vert','horz_vert_do_update');
+add_action('admin_post_update_timeline_asc_desc','asc_desc_do_update');
 
 ?>
