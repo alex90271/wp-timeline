@@ -81,6 +81,18 @@ $timeline_meta_boxes = array(
 		'name' => 'wptl_timeline-fact',
 		'type' => 'inputtext',
 		'extra' => __('', 'wptl')
+	),
+	array(
+		'title' => __('Link Button Text', 'wptl'),
+		'name' => 'wptl_link_btn',
+		'type' => 'inputtext',
+		'extra' => __('', 'wptl')
+	),
+	array(
+		'title' => __('PDF Button Text', 'wptl'),
+		'name' => 'wptl_pdf_btn',
+		'type' => 'inputtext',
+		'extra' => __('', 'wptl')
 	)
 );
 
@@ -152,6 +164,8 @@ function wptl_get_timeline_items_array()
 		$pub['img'] = get_post_meta($pub['id'], 'wptl_timeline-img', true);
 		$pub['fact'] = get_post_meta($pub['id'], 'wptl_timeline-fact', true);
 		$pub['link'] = get_post_meta($pub['id'], 'wptl_timeline-link', true);
+		$pub['link_btn'] = get_post_meta($pub['id'], 'wptl_link_btn', true);
+		$pub['pdf_btn'] = get_post_meta($pub['id'], 'wptl_pdf_btn', true);
 		$pub['body'] = get_post_field('post_content', $pub['id']);
 		$timeline_items[] = $pub;
 
@@ -187,21 +201,32 @@ function wptl_get_timeline_items_formatted()
 			$img = null;
 		}
 
-
-		if (!empty($pub['pdf_url'])) {
-			$pdf = '<a class="abtn abtn-primary" href="' . $pub['pdf_url'] . '"> ' . __('Read more', 'wptl') . '</a>';
-		} else {
-			$pdf = null;
-		}
-
 		if (!empty($pub['link'])) {
-			if (!empty($pub['pdf_url'])) {
-				$link = '<a class="abtn abtn-secondary" href="' . $pub['link'] . '"> ' . __('Read more', 'wptl') . '</a>';
+			if (!empty($pub['link_btn'])) {
+				$link = '<a class="link_url abtn abtn-primary" href="' . $pub['link'] . '"> ' . $pub['link_btn'] . '</a>';
 			} else {
-				$link = '<a class="abtn abtn-primary" href="' . $pub['link'] . '"> ' . __('Read more', 'wptl') . '</a>';
+				$link = '<a class="link_url abtn abtn-primary" href="' . $pub['link'] . '"> ' . __('Visit the page', 'wptl') . '</a>';
 			}
+
 		} else {
 			$link = null;
+		}
+
+		if (!empty($pub['pdf_url'])) {
+
+			if (!empty($pub['pdf_btn'])) {
+				$temppdf = $pub['pdf_url'] . '"> ' . $pub['pdf_btn'] . '</a>';
+			} else {
+				$temppdf = $pub['pdf_url'] . '"> ' . __('Read more', 'wptl') . '</a>';
+			}
+			if (!empty($pub['link'])) {
+				$pdf = '<a class="pdf_url abtn abtn-secondary" href="' . $temppdf;
+			} else {
+				$pdf = '<a class="pdf_url abtn abtn-primary" href="' . $temppdf;
+			}
+
+		} else {
+			$pdf = null;
 		}
 
 		if (!empty($pub['media'])) {
@@ -233,7 +258,7 @@ function wptl_get_timeline_items_formatted()
 								</div>
 								' . $media . '
 							</div>
-							<p class="timeline__links">' . $pdf . $link . '</p>
+							<p class="timeline__links">' . $link . $pdf . '</p>
 							<p>' . $fact . '</p>
 						</div>
 					</div>
@@ -257,7 +282,7 @@ function wptl_shortcode()
 	<script>
 	timeline(document.querySelectorAll(".timeline"), {
 		forceVerticalMode: 986,
-		mode: "'. get_option('timeline_horz_vert').'",
+		mode: "' . get_option('timeline_horz_vert') . '",
 	});
 	</script>';
 }
