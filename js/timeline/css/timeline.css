@@ -99,7 +99,7 @@
 .timeline__content {
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
     color: #333;
     display: block;
     padding: 1.25rem;
