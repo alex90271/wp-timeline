@@ -24,8 +24,8 @@ add_action('add_meta_boxes', 'wptl_add_timeline_options');
 add_action('admin_menu', 'wptl_register_sub_page');
 
 wp_enqueue_script('timelinejs', plugin_dir_url(__FILE__) . 'js/timeline/js/timeline.js');
-wp_enqueue_style('timelinejs-styles', plugin_dir_url(__FILE__) . 'js/timeline/css/timeline.css');
-wp_enqueue_style('timeline-post-styles', plugin_dir_url(__FILE__) . 'styles/tl-styles.css');
+wp_enqueue_style('timelinejs-styles', plugin_dir_url(__FILE__) . 'js/timeline/css/timeline.css', array(), 1);
+wp_enqueue_style('timeline-post-styles', plugin_dir_url(__FILE__) . 'styles/wptl_stylesheet.css', array(), 1);
 
 add_shortcode('timeline', 'wptl_shortcode');
 
@@ -37,7 +37,12 @@ add_option('timeline_horz_vert', $value = 'horizontal', $autoload = 'yes');
 $asc_desc_param = array(
     'horz_vert' => get_option('timeline_horz_vert')
 );
+
 add_action('admin_post_update_timeline_horz_vert','horz_vert_do_update');
 add_action('admin_post_update_timeline_asc_desc','asc_desc_do_update');
+
+/**
+ * Deactivation hook.
+ */
 
 ?>
