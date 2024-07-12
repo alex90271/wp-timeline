@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Timeline
 Description: Adds a timeline tab to wordpress. Allows creating a timeline using a custom post type
-Version: 2024.7.10
+Version: 2024.7.12
 Author: Alex Alder
 */
 
