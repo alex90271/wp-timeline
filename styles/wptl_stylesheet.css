@@ -1,35 +1,3 @@
-.abtn {
-    padding: 10px;
-}
-
-.btn-primary {
-    border: none !important;
-}
-
-.btn-secondary {
-    border: none !important;
-}
-
-.btn-primary:hover,
-.btn-secondary:hover {
-    background-color: white !important;
-    color: black !important;
-}
-
-.btn-secondary {
-    background-color: var(--e-global-color-secondary) !important;
-}
-
-.btn-primary:hover {
-    border: 2px solid var(--e-global-color-primary) !important;
-    color: var(--e-global-color-primary) !important;
-}
-
-.btn-secondary:hover {
-    border: 2px solid var(--e-global-color-secondary) !important;
-    color: var(--e-global-color-secondary) !important;
-}
-
 .btn-primary:hover:after,
 .btn-secondary:hover:after {
     filter: invert(0) !important;
@@ -97,6 +65,30 @@
 
 .timeline-nav-button {
     border: none;
+}
+
+.abtn {
+    padding: 10px;
+}
+
+.link_url {
+    background-color: var(--e-global-color-primary);
+    border: 2px solid var(--e-global-color-primary);
+    color: white !important;
+    text-decoration: none;
+}
+.pdf_url {
+    background-color: var(--e-global-color-secondary);
+    border: 2px solid var(--e-global-color-secondary);
+    color: white !important;
+    text-decoration: none;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+    background-color: white;
+    color: black !important;
+    transition: all 3ms;
 }
 
 .link_url::after,
