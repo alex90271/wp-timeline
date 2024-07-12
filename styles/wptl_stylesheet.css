@@ -14,7 +14,7 @@
     padding: 5px;
     padding: 5px 10px 2.5px 10px;
     border: 1px solid #ccc;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .timeline__fun-fact-heading::before {
@@ -69,26 +69,26 @@
     padding: 10px;
 }
 
-.btn-primary {
+.abtn.btn-primary {
     background-color: var(--e-global-color-primary);
     border: 2px solid var(--e-global-color-primary);
     color: white !important;
     text-decoration: none;
 }
 
-.btn-secondary {
+.abtn.btn-secondary {
     background-color: var(--e-global-color-secondary);
     border: 2px solid var(--e-global-color-secondary);
     color: white !important;
     text-decoration: none;
-    padding-left: 10px;
+    margin-left: 10px;
 }
 
-.btn-primary:hover,
-.btn-secondary:hover {
+.abtn.btn-primary:hover,
+.abtn.btn-secondary:hover {
     background-color: white;
     color: black !important;
-    transition: all 3ms;
+    transition: all 30ms;
 }
 
 .link_url::after,
