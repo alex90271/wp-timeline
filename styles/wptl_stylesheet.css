@@ -2,21 +2,37 @@
     padding: 10px;
 }
 
-a.abtn.abtn-primary {
-    background-color: var( --e-global-color-primary);
-    color: white;
-    text-decoration: none;
+.btn-primary {
+    border: none !important;
 }
 
-a.abtn.abtn-secondary {
-    background-color:  var( --e-global-color-secondary);
-    color: white;
-    text-decoration: none;
+.btn-secondary {
+    border: none !important;
 }
-.abtn:hover {
-    color: white !important;
-    background-color: #333333 !important;
-    text-decoration: underline !important;
+
+.btn-primary:hover,
+.btn-secondary:hover {
+    background-color: white !important;
+    color: black !important;
+}
+
+.btn-secondary {
+    background-color: var(--e-global-color-secondary) !important;
+}
+
+.btn-primary:hover {
+    border: 2px solid var(--e-global-color-primary) !important;
+    color: var(--e-global-color-primary) !important;
+}
+
+.btn-secondary:hover {
+    border: 2px solid var(--e-global-color-secondary) !important;
+    color: var(--e-global-color-secondary) !important;
+}
+
+.btn-primary:hover:after,
+.btn-secondary:hover:after {
+    filter: invert(0) !important;
 }
 
 .timeline__links {
@@ -36,7 +52,7 @@ a.abtn.abtn-secondary {
 }
 
 .timeline__fun-fact-heading::before {
-    background-image: url("/wp-content/plugins/timeline-js/images/info-square.svg");
+    background-image: url("/wp-content/plugins/wp-timeline/images/info-square.svg");
     display: inline-block;
     content: "";
     background-repeat: no-repeat;
@@ -83,7 +99,8 @@ a.abtn.abtn-secondary {
     border: none;
 }
 
-.link_url::after, .pdf_url::after {
+.link_url::after,
+.pdf_url::after {
     display: inline-block;
     content: "";
     background-repeat: no-repeat;
@@ -95,9 +112,11 @@ a.abtn.abtn-secondary {
     margin-left: 10px;
     filter: invert(1);
 }
+
 .pdf_url::after {
-    background-image: url("/wp-content/plugins/timeline-js/images/file-earmark-pdf.svg");
+    background-image: url("/wp-content/plugins/wp-timeline/images/file-earmark-pdf.svg");
 }
+
 .link_url::after {
-    background-image: url("/wp-content/plugins/timeline-js/images/box-arrow-up-right.svg");
+    background-image: url("/wp-content/plugins/wp-timeline/images/box-arrow-up-right.svg");
 }

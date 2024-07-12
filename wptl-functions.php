@@ -67,15 +67,18 @@ function wptl_register_sub_page()
  */
 function wptl_submenu_callback()
 {
+
+    $timeline_asc_desc = get_option('timeline_asc_desc');
+    $timeline_horz_vert = get_option('timeline_horz_vert');
     ?>
     <div class="wrap">
         <h2>Timeline Settings and Notes</h2>
         <h3>Timeline Order</h3>
-        <p>Currently set to: <?php echo get_option('timeline_asc_desc') ?></p>
+        <p>Currently set to: <?php echo $timeline_asc_desc ?></p>
         <form action="admin-post.php" name='update_timeline_asc_desc_form' method="post">
             <input type="hidden" name="action" value="update_timeline_asc_desc" />
             <select id="timeline_asc_desc" name="timeline_asc_desc" value=''>
-                <option value="<?php echo get_option('timeline_asc_desc') ?>">Select an option</option>
+                <option value="<?php echo $timeline_asc_desc ?>">Select an option</option>
                 <option value="ASC">Ascending</option>
                 <option value="DESC">Descending</option>
             </select>
@@ -85,11 +88,11 @@ function wptl_submenu_callback()
         </form>
         <br/>
         <h3>Timeline Orientation</h3>
-        <p>Currently set to: <?php echo get_option('timeline_horz_vert') ?></p>
+        <p>Currently set to: <?php echo $timeline_horz_vert ?></p>
         <form action="admin-post.php" name='update_timeline_horz_vert_form' method="post">
             <input type="hidden" name="action" value="update_timeline_horz_vert" />
             <select id="timeline_horz_vert" name="timeline_horz_vert" value=''>
-                <option value="<?php echo get_option('timeline_horz_vert') ?>">Select an option</option>
+                <option value="<?php echo $timeline_horz_vert ?>">Select an option</option>
                 <option value="horizontal">Horizontal</option>
                 <option value="vertical">Vertical</option>
             </select>
