@@ -166,7 +166,7 @@ function wptl_get_timeline_items_array()
 		$pub['link'] = get_post_meta($pub['id'], 'wptl_timeline-link', true);
 		$pub['link_btn'] = get_post_meta($pub['id'], 'wptl_link_btn', true);
 		$pub['pdf_btn'] = get_post_meta($pub['id'], 'wptl_pdf_btn', true);
-		$pub['body'] = get_post_field('post_content', $pub['id']);
+		$pub['body'] = wpautop(get_post_field('post_content', $pub['id']));
 		$timeline_items[] = $pub;
 
 	}
@@ -219,7 +219,7 @@ function wptl_get_timeline_items_formatted()
 			} else {
 				$temppdf = $pub['pdf_url'] . '" target="_blank"> ' . __('Read more', 'wptl') . '</a>';
 			}
-			if (!empty($pub['link'])) {
+			if (!empty($link)) {
 				$pdf = '<a class="pdf_url abtn btn-secondary" href="' . $temppdf;
 			} else {
 				$pdf = '<a class="pdf_url abtn btn-primary" href="' . $temppdf;
