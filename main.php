@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Timeline
 Description: Adds a timeline tab to wordpress. Allows creating a timeline using a custom post type
-Version: 2024.7.12
+Version: 2024.7.13
 Author: Alex Alder
 */
 
@@ -25,7 +25,7 @@ add_action('admin_menu', 'wptl_register_sub_page');
 
 wp_enqueue_script('timelinejs', plugin_dir_url(__FILE__) . 'js/timeline/js/timeline.js');
 wp_enqueue_style('timelinejs-styles', plugin_dir_url(__FILE__) . 'js/timeline/css/timeline.css', array(), 1);
-wp_enqueue_style('timeline-post-styles', plugin_dir_url(__FILE__) . 'styles/wptl_stylesheet.css', array(), 2);
+wp_enqueue_style('timeline-post-styles', plugin_dir_url(__FILE__) . 'styles/wptl_stylesheet.css', array(), 3);
 
 add_shortcode('timeline', 'wptl_shortcode');
 

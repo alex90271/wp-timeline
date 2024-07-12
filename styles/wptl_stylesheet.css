@@ -6,8 +6,6 @@
 .timeline__links {
     margin-top: 10px;
     margin-bottom: 10px;
-    display: flex;
-    gap: 10px;
 }
 
 .timeline__fun-fact {
@@ -71,17 +69,19 @@
     padding: 10px;
 }
 
-.link_url {
+.btn-primary {
     background-color: var(--e-global-color-primary);
     border: 2px solid var(--e-global-color-primary);
     color: white !important;
     text-decoration: none;
 }
-.pdf_url {
+
+.btn-secondary {
     background-color: var(--e-global-color-secondary);
     border: 2px solid var(--e-global-color-secondary);
     color: white !important;
     text-decoration: none;
+    padding-left: 10px;
 }
 
 .btn-primary:hover,
